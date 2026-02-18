@@ -5,17 +5,22 @@ contract ERC_20 {
     string tokenName = "RAJ-Token";
     string tokenSymbol = "RAJ";
     uint8 tokenDecimal = 18;
-    uint256 tokenTotalSupply;
-    uint256 tokenBalanceOf;
-    uint256 tokenAllowance;
+    uint256 tokenTotalSupply = 1000000000;
  
     //Mapping
     mapping(address => uint256) balances;
     mapping(address=>mapping(address=>uint256)) private myAllowance;
 
     // Events
-    event TransferSuccess(address indexed sender, address indexed receiver, uint256 amount);
+    event Transfer(address indexed sender, address indexed receiver, uint256 amount);
     event Approval(address owner, address spender, uint256 value);
+
+    constructor(string memory _name, string memory _symbol, uint8 _decimal, uint256 _supply){
+        tokenName = _name;
+        tokenSymbol = _symbol;
+        tokenDecimal = _decimal;
+        tokenTotalSupply = _supply;
+    }
 
 
 
@@ -41,12 +46,13 @@ contract ERC_20 {
     }
 
     function transfer(address _to, uint256 _value) public returns(bool success){
+        require(_to != address(0), "Address should not be address 0");
         require(balances[msg.sender] >= _value, "Value must not be greater than your balance");
 
         balances[msg.sender] = balances[msg.sender] - _value;
         balances[_to] = balances[_to] + _value;
 
-        emit TransferSuccess(msg.sender, _to, _value);
+        emit Transfer(msg.sender, _to, _value);
 
         return true;
 
@@ -55,13 +61,14 @@ contract ERC_20 {
     function transferFrom(address _from,address _to, uint256 _value) public returns(bool){
         
         require(_from != address(0) && _to != address(0) ,"Address Shouldn't be Address 0");
+        require(_value <= balances[_from], "Insufficient balance");
         require(_value <= myAllowance[_from][msg.sender], "Value must not be more than Allowance");
 
         myAllowance[_from][msg.sender] = myAllowance[_from][msg.sender] - _value;
         balances[_from] = balances[_from] - _value;
         balances[_to] = balances[_to] + _value;
 
-        emit TransferSuccess(_from, _to, _value);
+        emit Transfer(_from, _to, _value);
 
         return true;
 
@@ -72,6 +79,10 @@ contract ERC_20 {
         require(_spender!= address(0), "Spender should not be address 0");
 
         myAllowance[msg.sender][_spender] = _value;
+
+        emit Approval(msg.sender, _spender,_value);
+
+        return true;
 
     }
 
