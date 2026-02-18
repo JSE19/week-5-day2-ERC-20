@@ -69,6 +69,4 @@ When you move these types between locations, the EVM performs different operatio
 * **Structs:** Custom groupings. Like arrays, they require a location specifier when used in functions.
 * **Mappings:** The "VIPs" of storage. No location specifier is needed because they have no home other than `storage`.
 
----
 
-**Would you like me to generate a code example demonstrating the gas cost difference between modifying a struct in `storage` vs. `memory`?**
