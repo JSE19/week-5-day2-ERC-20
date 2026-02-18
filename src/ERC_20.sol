@@ -5,7 +5,7 @@ contract ERC_20 {
     string tokenName = "RAJ-Token";
     string tokenSymbol = "RAJ";
     uint8 tokenDecimal = 18;
-    uint256 tokenTotalSupply = 1000000000;
+    uint256 tokenTotalSupply;
  
     //Mapping
     mapping(address => uint256) balances;
@@ -15,12 +15,12 @@ contract ERC_20 {
     event Transfer(address indexed sender, address indexed receiver, uint256 amount);
     event Approval(address owner, address spender, uint256 value);
 
-    constructor(string memory _name, string memory _symbol, uint8 _decimal, uint256 _supply){
-        tokenName = _name;
-        tokenSymbol = _symbol;
-        tokenDecimal = _decimal;
-        tokenTotalSupply = _supply;
-    }
+    // constructor(string memory _name, string memory _symbol, uint8 _decimal, uint256 _supply){
+    //     tokenName = _name;
+    //     tokenSymbol = _symbol;
+    //     tokenDecimal = _decimal;
+    //     tokenTotalSupply = _supply;
+    // }
 
 
 
@@ -88,6 +88,12 @@ contract ERC_20 {
 
     function allowance(address _owner, address _spender) public view returns(uint256){
         return myAllowance[_owner][_spender];
+    }
+
+    function mint(uint _amount) public {
+        balances[msg.sender] = balances[msg.sender] + _amount;
+        tokenTotalSupply = tokenTotalSupply + _amount;
+
     }
 
 

@@ -12,7 +12,7 @@ contract ERC_20Script is Script {
     function run() public {
         vm.startBroadcast();
 
-        erc_20 = new ERC_20("RAJ-Token", "RAJ", 18, 1000000000);
+        erc_20 = new ERC_20();
 
         vm.stopBroadcast();
     }
